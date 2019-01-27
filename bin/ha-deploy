@@ -53,5 +53,8 @@ else
 fi
 set -e
 
+# activate python virtualenv
+. "${ERIGONES_HOME}/envs/bin/activate"
+
 cd "${ANS_BASE}"
 ansible-playbook "${PLAYBOOK}" --extra-vars "cluster_master_host=$CLUSTER_MASTER_HOST"

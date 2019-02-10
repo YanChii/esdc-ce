@@ -228,6 +228,11 @@ base64_decode() {
 	printf "%s" "${str}" | python -m base64 -d -
 }
 
+remote_function_exists() {
+	local funcname="$1"
+
+	_dest_host_cmd type "${funcname}" &> /dev/null
+}
 
 ###############################################################
 # Validators (motto: die as soon as possible)
@@ -660,7 +665,7 @@ _vm_wait_for_become_visble() {
 		if vmadm lookup -1 "uuid=${uuid}" &>/dev/null; then
 			return 0
 		fi
-		let --timeout_sec
+		(( --timeout_sec ))
 		sleep 1
 	done
 	return 1
@@ -709,6 +714,12 @@ _zone_delete() {
 	local zonename="$1"
 
 	${ZONECFG} -z "${zonename}" delete -F
+}
+
+_zone_halt() {
+	local zone="$1"
+
+	${ZONEADM} -z "${zone}" halt
 }
 
 _zone_attach() {
